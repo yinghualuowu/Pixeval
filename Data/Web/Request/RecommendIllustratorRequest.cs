@@ -14,33 +14,16 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.IO;
+using Refit;
 
-namespace Pixeval.Objects
+namespace Pixeval.Data.Web.Request
 {
-    internal class TextBuffer
+    public class RecommendIllustratorRequest
     {
-        public static FileInfo GetOrCreateFile(string path)
-        {
-            if (!File.Exists(path)) File.Create(path);
-            return new FileInfo(path);
-        }
+        [AliasAs("filter")]
+        public string Filter { get; } = "for_android";
 
-        public static string GetOrCreateDirectory(string path)
-        {
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-
-            return path;
-        }
-
-        public static string GetExtension(string file)
-        {
-            return file[file.LastIndexOf('.')..];
-        }
-
-        public static void WriteAllBytesTaskAsync(string path, byte[] bytes)
-        {
-            File.WriteAllBytesAsync(path, bytes);
-        }
+        [AliasAs("offset")]
+        public int Offset { get; set; } = 0;
     }
 }

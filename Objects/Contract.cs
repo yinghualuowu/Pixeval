@@ -14,19 +14,15 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System;
 
-namespace Pixeval.Data.Web.Delegation
+namespace Pixeval.Objects
 {
-    public class PixivImageDnsResolver : DnsResolver
+    public static class Contract
     {
-        public static DnsResolver Instance = new PixivImageDnsResolver();
-
-        protected override IEnumerable<IPAddress> UseDefaultDns()
+        public static void Requires<E>(bool condition, string message = null) where E : Exception
         {
-            return Enumerable.Range(136, 10).Select(i => IPAddress.Parse($"210.140.92.{i}"));
+            if (!condition) throw (Exception) Activator.CreateInstance(typeof(E), new {message});
         }
     }
 }

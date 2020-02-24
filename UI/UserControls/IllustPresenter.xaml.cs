@@ -14,11 +14,17 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using MaterialDesignThemes.Wpf.Transitions;
 using Pixeval.Data.ViewModel;
+using Pixeval.Data.Web.Delegation;
+using Pixeval.Data.Web.Request;
 using Pixeval.Objects;
 using PropertyChanged;
+using static Pixeval.Objects.UiHelper;
 
 namespace Pixeval.UI.UserControls
 {
@@ -41,7 +47,32 @@ namespace Pixeval.UI.UserControls
 
         private async void CopyImageItem_OnClick(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetImage(await PixivEx.GetAndCreateOrLoadFromCache(false, Illust.Origin, Illust.Id));
+            Clipboard.SetImage(await PixivEx.FromUrl(Illust.Origin.IsNullOrEmpty() ? Illust.Large : Illust.Origin));
+        }
+
+        private void MovePrevButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Transitioner.MovePreviousCommand.Execute(null, null);
+            ChangeSource();
+        }
+
+        private void MoveNextButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Transitioner.MoveNextCommand.Execute(null, null);
+            ChangeSource();
+        }
+
+        private void ChangeSource()
+        {
+            Task.Run(() =>
+            {
+                (Dispatcher ?? throw new InvalidOperationException()).Invoke(async () =>
+                {
+                    MainWindow.Instance.IllustBrowserDialogHost.DataContext = Illust;
+                    var userInfo = await HttpClientFactory.AppApiService.GetUserInformation(new UserInformationRequest {Id = Illust.UserId});
+                    SetImageSource(MainWindow.Instance.IllustBrowserUserAvatar, await PixivEx.FromUrl(userInfo.UserEntity.ProfileImageUrls.Medium));
+                });
+            });
         }
     }
 }

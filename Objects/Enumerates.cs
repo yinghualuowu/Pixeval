@@ -57,5 +57,18 @@ namespace Pixeval.Objects
         {
             return src.All(x => x.IsNullOrEmpty() && compare.Any(i => i.EqualsIgnoreCase(x)));
         }
+
+        public static IEnumerable<T> Peek<T>(this IEnumerable<T> enumerable, Action<T> action)
+        {
+            var peek = enumerable as T[] ?? enumerable.ToArray();
+            foreach (var t in peek) action(t);
+
+            return peek;
+        }
+
+        public static IEnumerable<T> NonNull<T>(this IEnumerable<T> source)
+        {
+            return source.Where(s => s != null);
+        }
     }
 }

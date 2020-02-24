@@ -24,9 +24,6 @@ namespace Pixeval.Data.Web.Protocol
     [Headers("Authorization: Bearer")]
     public interface IAppApiProtocol
     {
-        [Get("/v1/illust/recommended")]
-        Task<RankingResponse> GetRanking(RankingRequest rankingRequest);
-
         [Post("/v1/illust/bookmark/delete")]
         Task DeleteBookmark([Body(BodySerializationMethod.UrlEncoded)]
             DeleteBookmarkRequest deleteBookmarkRequest);
@@ -37,9 +34,6 @@ namespace Pixeval.Data.Web.Protocol
         [Headers("Accept-Language: zh-cn")]
         [Get("/v1/spotlight/articles?category=all")]
         Task<SpotlightResponse> GetSpotlights(int offset);
-
-        [Get("/v1/user/following")]
-        Task<FollowingResponse> GetFollowing(FollowingRequest followingRequest);
 
         [Post("/v1/user/follow/add")]
         Task FollowArtist([Body(BodySerializationMethod.UrlEncoded)]
@@ -56,9 +50,6 @@ namespace Pixeval.Data.Web.Protocol
         Task AddBookmark([Body(BodySerializationMethod.UrlEncoded)]
             AddBookmarkRequest addBookmarkRequest);
 
-        [Get("/v1/search/user")]
-        Task<UserNavResponse> GetUserNav(string word, int offset = 0, string filter = "for_android");
-
         [Headers("Accept-Language: en-us")]
         [Get("/v2/search/autocomplete")]
         Task<AutoCompletionResponse> GetAutoCompletion(AutoCompletionRequest autoCompletionRequest);
@@ -66,5 +57,9 @@ namespace Pixeval.Data.Web.Protocol
         [Headers("Accept-Language: zn-cn")]
         [Get("/v1/illust/detail")]
         Task<SingleWorkResponse> GetSingle([AliasAs("illust_id")] string id);
+
+        [Headers("Accept-Language: zn-cn")]
+        [Get("/v1/user/recommended?filter=for_android")]
+        Task<RecommendIllustratorResponse> GetRecommendIllustrators(RecommendIllustratorRequest recommendIllustratorRequest);
     }
 }

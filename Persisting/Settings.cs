@@ -32,9 +32,9 @@ namespace Pixeval.Persisting
 
         public bool SortOnInserting { get; set; }
 
-        public bool CachingThumbnail { get; set; }
-
         public int MinBookmark { get; set; } = 1;
+
+        public bool RecommendIllustrator { get; set; }
 
         public string DownloadLocation
         {
@@ -79,13 +79,13 @@ namespace Pixeval.Persisting
             Global.downloadLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
             Global.DownloadLocation = string.Empty;
             Global.SortOnInserting = false;
-            Global.CachingThumbnail = false;
             Global.ContainsTags = new HashSet<string>();
             Global.ExceptTags = new HashSet<string>();
             Global.MinBookmark = 0;
             Global.QueryPages = 1;
             Global.QueryStart = 1;
             Global.SpotlightQueryStart = 1;
+            Global.RecommendIllustrator = false;
         }
     }
 }
